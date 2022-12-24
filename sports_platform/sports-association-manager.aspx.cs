@@ -7,6 +7,8 @@ using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using System.Drawing;
+using System.Runtime.Remoting.Messaging;
 
 namespace sports_platform
 {
@@ -14,7 +16,30 @@ namespace sports_platform
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            string connStr = WebConfigurationManager.ConnectionStrings["Sports_Platform_DB"].ToString();
+            SqlConnection conn = new SqlConnection(connStr);
+            if (conn.State == ConnectionState.Closed)
+                conn.Open();
 
+            SqlCommand cmd1 = new SqlCommand("SELECT * FROM allUpcomingMatches", conn);
+            SqlDataReader rdr = cmd1.ExecuteReader();
+            GridView1.DataSource = rdr;
+            GridView1.DataBind();
+            rdr.Close();
+
+            SqlCommand cmd2 = new SqlCommand("SELECT * FROM alreadyPlayedMatches", conn);
+            SqlDataReader rdr2 = cmd2.ExecuteReader();
+            GridView2.DataSource = rdr2;
+            GridView2.DataBind();
+            rdr2.Close();
+
+            SqlCommand cmd3 = new SqlCommand("SELECT * FROM clubsNeverMatched", conn);
+            SqlDataReader rdr3 = cmd3.ExecuteReader();
+            GridView3.DataSource = rdr3;
+            GridView3.DataBind();
+            rdr3.Close();
+
+            conn.Close();
         }
 
         protected void add_match_btn_Click(object sender, EventArgs e)
@@ -27,8 +52,7 @@ namespace sports_platform
             String startTime = start_time_SAM_add.Text;
             String endTime = end_time_SAM_add.Text;
 
-            SqlCommand clubs = new SqlCommand("allClubs", conn);
-            clubs.CommandType = CommandType.TableDirect;
+            SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
 
             conn.Open();
             SqlDataReader rdr = clubs.ExecuteReader(CommandBehavior.CloseConnection);
@@ -42,6 +66,7 @@ namespace sports_platform
                 if (guestName == clubName)
                     guestClubFound = true;
             }
+            rdr.Close();
 
             if (hostClubFound && guestClubFound)
             {
@@ -53,13 +78,18 @@ namespace sports_platform
                 addMatch.Parameters.Add(new SqlParameter("@start_time", startTime));
                 addMatch.Parameters.Add(new SqlParameter("@end_time", endTime));
 
-                conn.Open();
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
                 addMatch.ExecuteNonQuery();
                 conn.Close();
+
+                Response.Write("match added successfully ✔");
             }
             else
-                Response.Write("Incorrect Club name!");
-
+                Response.Write("invalid club name❌");
+            //can also check for each input like start time
+            
+            
         }
 
         protected void delete_match_btn_Click(object sender, EventArgs e)
@@ -72,8 +102,7 @@ namespace sports_platform
             // String startTime = start_time_SAM_del.Text;
             // String endTime = end_time_SAM_del.Text;
 
-            SqlCommand clubs = new SqlCommand("allClubs", conn);
-            clubs.CommandType = CommandType.TableDirect;
+            SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
 
             conn.Open();
             SqlDataReader rdr = clubs.ExecuteReader(CommandBehavior.CloseConnection);
@@ -87,6 +116,7 @@ namespace sports_platform
                 if (guestName == clubName)
                     guestClubFound = true;
             }
+            rdr.Close();
 
             if (hostClubFound && guestClubFound)
             {
@@ -97,12 +127,15 @@ namespace sports_platform
                 deleteMatch.Parameters.Add(new SqlParameter("@guest_name", guestName));
                 //removed 2 parameters for start and end time
 
-                conn.Open();
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
                 deleteMatch.ExecuteNonQuery();
                 conn.Close();
+
+                Response.Write("match deleted successfully ✔");
             }
             else
-                Response.Write("Incorrect Club name!");
+                Response.Write("invalid club name❌");
         }
     }
 }
