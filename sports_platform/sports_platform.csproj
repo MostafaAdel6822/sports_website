@@ -69,6 +69,7 @@
   <ItemGroup>
     <Content Include="index.aspx" />
     <Content Include="login.aspx" />
+    <Content Include="sports-association-manager.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +88,13 @@
       <DependentUpon>login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sports-association-manager.aspx.cs">
+      <DependentUpon>sports-association-manager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="sports-association-manager.aspx.designer.cs">
+      <DependentUpon>sports-association-manager.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
