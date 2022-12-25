@@ -4,10 +4,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Windows;
 
 namespace sports_platform.ClubRepresentative
 {
@@ -55,8 +57,8 @@ namespace sports_platform.ClubRepresentative
             conn.Open();
             send_Host_Request.ExecuteNonQuery();
             conn.Close();
-            Response.Write("Request Sent!");
-
+            //Response.Write("Request Sent!");
+            MessageBox.Show("Request Sent Successfully!");
 
 
         }
