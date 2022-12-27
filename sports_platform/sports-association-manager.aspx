@@ -7,16 +7,15 @@
     <title></title>
 </head>
 <body>
- 
-        <div>
-            Sports Association Manager</div>
+        <div>Sports Association Manager</div>
         <div>Name of user</div>
     <form id="form1" runat="server">
         <br/> 
         <p>
             Add Match</p>
         <div>
-            <span style="padding:1.4em;">host club name</span> <span style="padding:0.5em;">guest club name</span> <span style="padding-left:2.3em;">start time</span> <span style="padding-left:5em;">end time</span></div>
+            <span style="padding:1.4em;">host club name</span> <span style="padding:0.5em;">guest club name</span> <span style="padding-left:2.3em;">start time</span> <span style="padding-left:5em;">end time</span>
+        </div>
         <asp:TextBox ID="host_name_SAM_add" runat="server"></asp:TextBox>
         <asp:TextBox ID="guest_name_SAM_add" runat="server"></asp:TextBox>
         <asp:TextBox ID="start_time_SAM_add" runat="server"></asp:TextBox>

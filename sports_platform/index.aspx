@@ -10,15 +10,25 @@
     <form id="form1" runat="server">
         
         <div>
+            <p>Please Login</p>
+                    <p>
+            Username:</p>
+        <asp:TextBox ID="username" runat="server"></asp:TextBox>
+        <p>
+            Password:</p>
+        <asp:TextBox ID="password" runat="server"></asp:TextBox>
+        <br />
+        <br />
+        <asp:Button ID="loginBtn" runat="server" Text="Login" OnClick="loginBtn_Click"/>
             <br/>
-            <asp:Button ID="login_page" runat="server" Text="Login Page" OnClick="login_page_Click" style="height: 29px"/>
-            <br />
+            <br/>
+            <br/>
             Register As</div>
         <br/>
-        <asp:Button ID="register_SAM" runat="server" Text="Sports Association Manager" OnClick="register_SAM_Click"/>
-        <asp:Button ID="register_CR" runat="server" Text="Club Representative" OnClick="register_CR_Click"/>
-        <asp:Button ID="register_SM" runat="server" Text="Stadium Manager" OnClick="register_SM_Click" />
-        <asp:Button ID="register_fan" runat="server" Text="Fan" OnClick="register_fan_Click"/>
+        <asp:Button ID="register_SAM" runat="server" Text="Sports Association Manager"/>
+        <asp:Button ID="register_CR" runat="server" Text="Club Representative"/>
+        <asp:Button ID="register_SM" runat="server" Text="Stadium Manager"/>
+        <asp:Button ID="register_fan" runat="server" Text="Fan"/>
         <br/>
     </form>
 </body>

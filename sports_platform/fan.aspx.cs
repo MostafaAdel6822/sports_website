@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Windows.Forms;
 
 namespace sports_platform
 {
@@ -37,7 +38,7 @@ namespace sports_platform
 
             string startingTime = starting_time.Text;
             
-            string query = String.Format("SELECT * FROM dbo.availableMatchesStartingFrom('{0}')", startingTime);
+            string query = $"SELECT * FROM dbo.availableMatchesStartingFrom('{startingTime}')";
             SqlCommand viewMatches = new SqlCommand(query, conn);
             SqlDataReader rdr = viewMatches.ExecuteReader();
             GridView1.DataSource = rdr;
@@ -53,7 +54,7 @@ namespace sports_platform
             SqlConnection conn = new SqlConnection(connStr);
 
             //TODO: get national id using current user
-            String nationalID = "";
+            String nationalID = Session["nationalID"].ToString();
             String hostName = host_name_Fan_purchase.Text;
             String guestName = guest_name_Fan_purchase.Text;
             String startTime = start_time_Fan_purchase.Text;
@@ -90,11 +91,11 @@ namespace sports_platform
                 purchaseTicket.ExecuteNonQuery();
                 conn.Close();
 
-                Response.Write("ticket purchased successfully ✔");
-
+                //Response.Write("ticket purchased successfully ✔");
+                MessageBox.Show("ticket purchased successfully ✔");
             }
             else
-                Response.Write("invalid club name❌");
+                MessageBox.Show("invalid club name❌");
 
 
         }

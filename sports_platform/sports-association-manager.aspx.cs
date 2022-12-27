@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Drawing;
 using System.Runtime.Remoting.Messaging;
+using System.Windows.Forms;
 
 namespace sports_platform
 {
@@ -83,10 +84,10 @@ namespace sports_platform
                 addMatch.ExecuteNonQuery();
                 conn.Close();
 
-                Response.Write("match added successfully ✔");
+                MessageBox.Show("match added successfully ✔");
             }
             else
-                Response.Write("invalid club name❌");
+                MessageBox.Show("invalid club name❌");
             //can also check for each input like start time
             
             
@@ -132,10 +133,10 @@ namespace sports_platform
                 deleteMatch.ExecuteNonQuery();
                 conn.Close();
 
-                Response.Write("match deleted successfully ✔");
+                MessageBox.Show("match deleted successfully ✔");
             }
             else
-                Response.Write("invalid club name❌");
+                MessageBox.Show("invalid club name❌");
         }
     }
 }
