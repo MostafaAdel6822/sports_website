@@ -48,7 +48,7 @@ namespace sports_platform.ClubRepresentative
             Image1.ImageUrl = "data:Image/png;base64," + strBase64;
 
             SoundPlayer sound = new SoundPlayer("C:\\Users\\Admin\\Desktop\\GUC\\Semester 5\\Database1(CSEN501)\\milestone3\\sports_platform\\sports_platform\\CR_home\\barcaAnthem.wav");
-            // sound.Play();
+            sound.Play();
 
             conn.Close();
         }
@@ -57,7 +57,7 @@ namespace sports_platform.ClubRepresentative
         {
             string connStr = WebConfigurationManager.ConnectionStrings["Sports_Platform_DB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
-            SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
+           /* SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
 
             SqlCommand club_name = new SqlCommand($"SELECT C.name FROM Club C " +
                 $"INNER JOIN ClubRepresentative CR ON C.club_ID = CR.club_ID " +
@@ -66,23 +66,33 @@ namespace sports_platform.ClubRepresentative
             SqlDataReader rdrClub = club_name.ExecuteReader();
             rdrClub.Read();
             String clubName= rdrClub.GetString(rdrClub.GetOrdinal("name"));
-            rdrClub.Close();
+            rdrClub.Close();*/
 
 
             String stadiumName = Stadium.Text;
-            String startTime = StartTime.Text;  
-            //TODO validate start_  time(check if there is an upcoming match on this time
+            //String startTime = StartTime.Text;
+            DateTime startTime = DateTime.ParseExact(StartTime.Text, "yyyy-MM-dd HH:mm:ss", new CultureInfo("en-US"));
 
-            if (stadiumName == "" || startTime == "")
+            //TODO validate start_  time(check if there is an upcoming match on this time
+            /*Boolean matchFound = false;
+            SqlCommand findMatch = new SqlCommand("select * from Match", conn);
+            SqlDataReader rdrMatch = findMatch.ExecuteReader();
+            while (rdrClub.Read())
+            {
+                String actual_time = rdrMatch.GetString(rdrClub.GetOrdinal("start_time");
+                if (startTime == actual_time)
+                    matchFound = true;
+            }*/
+
+
+            if (stadiumName == "" || startTime == null)
                 MessageBox.Show("Please Fill All Fields!");
             else
             {
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
+                //Validate Stadium
                 SqlCommand stadiums = new SqlCommand("SELECT * FROM allStadiums", conn);
-
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
                 SqlDataReader rdr2 = stadiums.ExecuteReader(CommandBehavior.CloseConnection);
                 bool stadiumFound = false;
                 while (rdr2.Read())
@@ -92,25 +102,46 @@ namespace sports_platform.ClubRepresentative
                         stadiumFound = true;
                 }
                 rdr2.Close();
-                if (stadiumFound)
+                //validate start_time
+                Boolean matchFound = false;
+                SqlCommand findMatch = new SqlCommand("select * from allMatches", conn);
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+                SqlDataReader rdrMatch = findMatch.ExecuteReader();
+                while (rdrMatch.Read())
+                {
+                    DateTime actual_time = rdrMatch.GetDateTime(rdrMatch.GetOrdinal("start_time"));
+                    int flag = DateTime.Compare(actual_time, startTime);
+                    if(flag==0)
+                        matchFound = true;
+                }
+                rdrMatch.Close();
+
+                
+                if (stadiumFound && matchFound)
                 {
                     SqlCommand send_Host_Request = new SqlCommand("addHostRequest", conn);
                     send_Host_Request.CommandType = CommandType.StoredProcedure;
-                    send_Host_Request.Parameters.Add(new SqlParameter("@clubName", clubName));
+                    send_Host_Request.Parameters.Add(new SqlParameter("@clubName", "barca"));
                     send_Host_Request.Parameters.Add(new SqlParameter("@stadiumName", stadiumName));
                     send_Host_Request.Parameters.Add(new SqlParameter("@start_time", startTime));
-                    conn.Open();
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open(); 
                     send_Host_Request.ExecuteNonQuery();
                     conn.Close();
                     //Response.Write("Request Sent!");
                     MessageBox.Show("Request Sent Successfully!");
                 }
                 else
-                    MessageBox.Show("Invalid Stadium ");
-               
+                {
+                    if(!stadiumFound)
+                        MessageBox.Show("Invalid Stadium ");
+                    if(!matchFound)
+                        MessageBox.Show("Invalid Match ");
 
 
 
+                }
 
             }
         }
