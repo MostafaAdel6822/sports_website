@@ -9,16 +9,13 @@
 <body>
     <form id="form1" runat="server">
      <div>
+         <asp:Image ID="Image1" Height="170px" Width="170px" ImageAlign="Middle" runat="server" />
          <br />
 
      <asp:GridView ID="GridView1" runat="server"> </asp:GridView>
      <br />
 
      <asp:GridView ID="GridView3" runat="server"></asp:GridView>
-    <br />
-    <asp:Label runat="server" Text="Club"></asp:Label>   
-    <br />
-    <asp:TextBox ID="Club" runat="server"></asp:TextBox>
     <br />
     <asp:Label runat="server" Text="Stadium"></asp:Label>
     <br />
