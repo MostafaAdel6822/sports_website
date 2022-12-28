@@ -69,11 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CR_home\barca logo.png" />
-    <Content Include="CR_home\barcaAnthem.wav" />
     <Content Include="CR_home\CR_home.aspx" />
     <Content Include="CR_register_page.aspx" />
     <Content Include="SAM_register_page.aspx" />
-    <Content Include="test.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -97,13 +95,6 @@
     </Compile>
     <Compile Include="SAM_register_page.aspx.designer.cs">
       <DependentUpon>SAM_register_page.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="test.aspx.cs">
-      <DependentUpon>test.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="test.aspx.designer.cs">
-      <DependentUpon>test.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
