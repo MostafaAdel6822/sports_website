@@ -57,6 +57,14 @@ namespace sports_platform.ClubRepresentative
         {
             string connStr = WebConfigurationManager.ConnectionStrings["Sports_Platform_DB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
+            /* SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
+            SqlCommand club_name = new SqlCommand($"SELECT C.name FROM Club C " +
+                $"INNER JOIN ClubRepresentative CR ON C.club_ID = CR.club_ID " +
+                $"WHERE CR.username = '{Session["user"]}'", conn);
+            SqlDataReader rdrClub = club_name.ExecuteReader();
+            rdrClub.Read();
+            String clubName= rdrClub.GetString(rdrClub.GetOrdinal("name"));
+            rdrClub.Close();*/
             String stadiumName = Stadium.Text;
             //String startTime = StartTime.Text;
             if (stadiumName == "")
