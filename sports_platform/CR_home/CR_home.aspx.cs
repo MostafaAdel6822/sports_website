@@ -69,6 +69,7 @@ namespace sports_platform.ClubRepresentative
             //String startTime = StartTime.Text;
             //SPLITTTT
             //SPLITTTTTTTT
+            //SPLITTTTTTTTTTTTT
             if (stadiumName == "")
                 MessageBox.Show("Please Fill All Fields!");
             else
