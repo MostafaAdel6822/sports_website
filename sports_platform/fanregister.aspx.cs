@@ -22,36 +22,68 @@ namespace sports_platform
             String connStr = WebConfigurationManager.ConnectionStrings["Sports_Platform_DB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
-
+            if (conn.State == ConnectionState.Closed)
+                conn.Open();
             String name = TextBox1.Text;
             String username = TextBox2.Text;
             string pass = TextBox3.Text;
-            int phone = Int16.Parse(TextBox4.Text);
+            String phone = TextBox4.Text;
             String ID = TextBox5.Text;
-            String Add = TextBox6.Text;
+            String Add = TextBox6.Text; 
             String birthdate = TextBox7.Text;
-            if (name=="" || username=="" || pass== "" || TextBox4.Text=="" || ID == ""||Add=="" ||birthdate=="")
-                MessageBox.Show("one of the fields is empty!");
-            else
+        
+            try
             {
-                SqlCommand cmd = new SqlCommand("addFan", conn);
+                int phonenum = Int16.Parse(phone);
+                
+                if (name == "" || username == "" || pass == "" || phone == "" || ID == "" || Add == "" || birthdate == "")
+                    MessageBox.Show("one of the fields is empty!");
+                else 
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    SqlCommand userCmd = new SqlCommand("SELECT * FROM SystemUser", conn);
+                    SqlDataReader userRdr = userCmd.ExecuteReader();
+                    bool usernameFound = false;
+                    while (userRdr.Read())
+                    {
+                        String current_username = userRdr.GetString(userRdr.GetOrdinal("username"));
+                        if (username == current_username)
+                            usernameFound = true;
 
-                cmd.CommandType = CommandType.StoredProcedure;
+                    }
+                    userRdr.Close();
+                    if (!usernameFound) {
+                        if (conn.State == ConnectionState.Closed)
+                            conn.Open();
+                        SqlCommand cmd = new SqlCommand("addFan", conn);
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.Add(new SqlParameter("@name", name));
-                cmd.Parameters.Add(new SqlParameter("@username", username));
-                cmd.Parameters.Add(new SqlParameter("@password", pass));
-                cmd.Parameters.Add(new SqlParameter("@national_id", ID));
-                cmd.Parameters.Add(new SqlParameter("@birth_date", birthdate));
-                cmd.Parameters.Add(new SqlParameter("@address", Add));
-                cmd.Parameters.Add(new SqlParameter("@phone", phone));
+                        cmd.Parameters.Add(new SqlParameter("@name", name));
+                        cmd.Parameters.Add(new SqlParameter("@username", username));
+                        cmd.Parameters.Add(new SqlParameter("@password", pass));
+                        cmd.Parameters.Add(new SqlParameter("@national_id", ID));
+                        cmd.Parameters.Add(new SqlParameter("@birth_date", birthdate));
+                        cmd.Parameters.Add(new SqlParameter("@address", Add));
+                        cmd.Parameters.Add(new SqlParameter("@phone", phonenum));
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                        
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
 
-                MessageBox.Show("The Fan added successfully ");
+                        MessageBox.Show("The Fan added successfully ");
+                    }
+                    else
+                    {
+                        MessageBox.Show("this username already exists");
+                    }  
+                }
             }
+            catch
+            {
+                MessageBox.Show("invalid input");
+            }
+           
 
             /*Response.Redirect("indexpage");*/
         }

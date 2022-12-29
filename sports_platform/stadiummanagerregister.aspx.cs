@@ -30,6 +30,21 @@ namespace sports_platform
             if (name == "" || username == "" || pass == "" || stadiumname =="")
                 MessageBox.Show("one of the fields is empty!");
             else {
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+                SqlCommand userCmd = new SqlCommand("SELECT * FROM SystemUser", conn);
+                SqlDataReader userRdr = userCmd.ExecuteReader();
+                bool usernameFound = false;
+                while (userRdr.Read())
+                {
+                    String current_username = userRdr.GetString(userRdr.GetOrdinal("username"));
+                    if (username == current_username)
+                        usernameFound = true;
+
+                }
+                userRdr.Close();
+
                 SqlCommand stadiums = new SqlCommand("SELECT * FROM allStadiums", conn);
 
                 if (conn.State == ConnectionState.Closed)
@@ -44,10 +59,9 @@ namespace sports_platform
                 }
                 rdr.Close();
                 
-                if (stadiumFound) {
+                if (stadiumFound && !usernameFound) {
                     SqlCommand cmd = new SqlCommand("addStadiumManager", conn);
                     cmd.CommandType = CommandType.StoredProcedure;
-
 
                     cmd.Parameters.Add(new SqlParameter("@stadiumManagerName", name));
                     cmd.Parameters.Add(new SqlParameter("@stadiumManagerUserName", username));
@@ -63,9 +77,15 @@ namespace sports_platform
                 }
                 else
                 {
-                    MessageBox.Show("stadium does not exist");
+                    if (usernameFound)
+                    {
+                        MessageBox.Show("this username already exists");
+                    }
+                    if (!stadiumFound)
+                    {
+                        MessageBox.Show("stadium does not exist");
+                    }
                 }
-              
             }
         }
     }

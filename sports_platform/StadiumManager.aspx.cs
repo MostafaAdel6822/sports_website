@@ -51,23 +51,78 @@ namespace sports_platform
             String hostname = TextBox1.Text;
             String guestname = TextBox2.Text;
             String starttime = TextBox3.Text;
-              
+
             if (hostname == "" || guestname == "" || starttime== "")
                 MessageBox.Show("one of the fields is empty!");
             else
             {
 
-                SqlCommand acceptproc = new SqlCommand("acceptRequest", conn);
-                acceptproc.CommandType = CommandType.StoredProcedure;
+                SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
 
-                acceptproc.Parameters.Add(new SqlParameter("@host_name", hostname));
-                acceptproc.Parameters.Add(new SqlParameter("@guest_name", guestname));
-                acceptproc.Parameters.Add(new SqlParameter("@start_time", starttime));
-                acceptproc.Parameters.Add(new SqlParameter("@username", Session["user"]));
+                conn.Open();
+                SqlDataReader rdr = clubs.ExecuteReader(CommandBehavior.CloseConnection);
+                bool hostClubFound = false;
+                while (rdr.Read())
+                {
+                    String clubName = rdr.GetString(rdr.GetOrdinal("name"));
+                    if (hostname == clubName)
+                        hostClubFound = true;
+                }
+                rdr.Close();
 
-                acceptproc.ExecuteNonQuery();
-                conn.Close();
-                MessageBox.Show("the request accepted successfully");
+                if (hostClubFound)
+                {
+                    SqlCommand clubRep = new SqlCommand($"SELECT * FROM ClubRepresentative CR inner join" +
+                        $"Club C on C.club_ID=CR.club_ID where C.name='{hostname}'", conn);
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    SqlDataReader rdr2 = clubRep.ExecuteReader(CommandBehavior.CloseConnection);
+                    rdr2.Read();
+                    String RepName = rdr2.GetString(rdr2.GetOrdinal("name"));
+                    rdr2.Close();
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.allPendingRequests('{Session["user"]}')", conn);
+                    SqlDataReader rdr3 = cmd.ExecuteReader();
+                    bool requestfound = false;
+                    while (rdr3.Read())
+                    {
+                        String repName = rdr3.GetString(rdr3.GetOrdinal("repName"));
+                        String guest = rdr3.GetString(rdr3.GetOrdinal("guest_name"));
+                        String Time = rdr3.GetString(rdr3.GetOrdinal("start_time"));
+
+                        if (RepName == repName && guest == guestname && Time == starttime)
+                            requestfound = true;
+                    }
+                    rdr3.Close();
+                    if (requestfound)
+                    {
+                        SqlCommand acceptproc = new SqlCommand("acceptRequest", conn);
+                        acceptproc.CommandType = CommandType.StoredProcedure;
+
+                        acceptproc.Parameters.Add(new SqlParameter("@host_name", hostname));
+                        acceptproc.Parameters.Add(new SqlParameter("@guest_name", guestname));
+                        acceptproc.Parameters.Add(new SqlParameter("@start_time", starttime));
+                        acceptproc.Parameters.Add(new SqlParameter("@username", Session["user"]));
+
+                        try { 
+                            acceptproc.ExecuteNonQuery();
+                            MessageBox.Show("the request accepted successfully");
+
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Incorrect time format");
+                        }
+                        conn.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("invalid request");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("invalid host club");
+                }
             }
         
         }
@@ -82,23 +137,79 @@ namespace sports_platform
             String hostname = TextBox1.Text;
             String guestname = TextBox2.Text;
             String starttime = TextBox3.Text;
-            
 
-            if (hostname == "" || guestname == "" || starttime== "")
+            if (hostname == "" || guestname == "" || starttime == "")
                 MessageBox.Show("one of the fields is empty!");
             else
             {
-                SqlCommand rejectproc = new SqlCommand("rejectRequest", conn);
-                rejectproc.CommandType = CommandType.StoredProcedure;
+                SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
 
-                rejectproc.Parameters.Add(new SqlParameter("@host_name", hostname));
-                rejectproc.Parameters.Add(new SqlParameter("@guest_name", guestname));
-                rejectproc.Parameters.Add(new SqlParameter("@start_time", starttime));
-                rejectproc.Parameters.Add(new SqlParameter("@username",Session["user"]));
+                conn.Open();
+                SqlDataReader rdr = clubs.ExecuteReader(CommandBehavior.CloseConnection);
+                bool hostClubFound = false;
+                while (rdr.Read())
+                {
+                    String clubName = rdr.GetString(rdr.GetOrdinal("name"));
+                    if (hostname == clubName)
+                        hostClubFound = true;
+                }
+                rdr.Close();
 
-                rejectproc.ExecuteNonQuery();
-                conn.Close();
-                MessageBox.Show("the request rejected successfully");
+                if (hostClubFound)
+                {
+                    SqlCommand clubRep = new SqlCommand($"SELECT * FROM ClubRepresentative CR inner join" +
+                        $"Club C on C.club_ID=CR.club_ID where C.name='{hostname}'", conn);
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    SqlDataReader rdr2 = clubRep.ExecuteReader(CommandBehavior.CloseConnection);
+                    rdr2.Read();
+                    String RepName = rdr2.GetString(rdr2.GetOrdinal("name"));
+                    rdr2.Close();
+                    SqlCommand cmd = new SqlCommand($"SELECT * FROM dbo.allPendingRequests('{Session["user"]}')", conn);
+                    SqlDataReader rdr3 = cmd.ExecuteReader();
+                    bool requestfound = false;
+                    while (rdr3.Read())
+                    {
+                        String repName = rdr3.GetString(rdr3.GetOrdinal("repName"));
+                        String guest = rdr3.GetString(rdr3.GetOrdinal("guest_name"));
+                        String Time = rdr3.GetString(rdr3.GetOrdinal("start_time"));
+
+                        if (RepName == repName && guest == guestname && Time == starttime)
+                            requestfound = true;
+                    }
+                    rdr3.Close();
+                    if (requestfound)
+                    {
+                        SqlCommand rejectproc = new SqlCommand("rejectRequest", conn);
+                        rejectproc.CommandType = CommandType.StoredProcedure;
+
+                        rejectproc.Parameters.Add(new SqlParameter("@host_name", hostname));
+                        rejectproc.Parameters.Add(new SqlParameter("@guest_name", guestname));
+                        rejectproc.Parameters.Add(new SqlParameter("@start_time", starttime));
+                        rejectproc.Parameters.Add(new SqlParameter("@username", Session["user"]));
+
+                        try
+                        {
+                            rejectproc.ExecuteNonQuery();
+                            MessageBox.Show("the request rejected successfully");
+
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Incorrect time format");
+                        }
+                        conn.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("invalid request");
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("invalid host club");
+                }
             }
         }
     }
