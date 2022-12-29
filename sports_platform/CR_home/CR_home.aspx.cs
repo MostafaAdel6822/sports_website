@@ -67,6 +67,7 @@ namespace sports_platform.ClubRepresentative
             rdrClub.Close();*/
             String stadiumName = Stadium.Text;
             //String startTime = StartTime.Text;
+            //SPLITTTT
             if (stadiumName == "")
                 MessageBox.Show("Please Fill All Fields!");
             else
