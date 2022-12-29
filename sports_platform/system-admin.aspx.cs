@@ -124,7 +124,7 @@ namespace sports_platform
                 MessageBox.Show("one of the fields is empty!");
             else if (stadiumFound)
             {
-                MessageBox.Show("this stadium does not exist!");
+                MessageBox.Show("Stadium Already Exists!");
             }
             else
             {

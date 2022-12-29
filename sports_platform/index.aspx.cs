@@ -8,7 +8,7 @@ using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
-
+    
 namespace sports_platform
 {
     public partial class index : System.Web.UI.Page
@@ -156,14 +156,19 @@ namespace sports_platform
             }
             else if (isSM && pwCorrect)
             {
-                Response.Redirect(".aspx");
+                Response.Redirect("StadiumManager.aspx");
             }
             else if (isCR && pwCorrect)
             {
-                //TODO
-                Response.Redirect(".aspx");
+                SqlCommand clubNamee = new SqlCommand($"SELECT C.name FROM Club C inner join ClubRepresentative CR on C.club_ID = CR.club_ID " +
+                    $"WHERE username = '{currentUserUsername}'", conn);
+                SqlDataReader rdrClub = clubNamee.ExecuteReader();
+                rdrClub.Read();
+                Session["club"] = rdrClub.GetString(rdrClub.GetOrdinal("name"));
+                rdrClub.Close();
+                Response.Redirect("CR_home.aspx");
             }
-            else if (isFan && pwCorrect)
+            else if (isFan && pwCorrect)    
             {
                 SqlCommand natID_cmd = new SqlCommand($"SELECT national_ID FROM Fan " +
                     $"WHERE username = '{currentUserUsername}'", conn);
@@ -182,21 +187,23 @@ namespace sports_platform
 
         protected void register_SAM_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("SAM_register_page.aspx");
         }
 
         protected void register_CR_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("CR_register_page.aspx");
         }
 
         protected void register_SM_Click(object sender, EventArgs e)
         {
+            Response.Redirect("stadiummanagerregister.aspx");
 
         }
 
         protected void register_fan_Click(object sender, EventArgs e)
         {
+            Response.Redirect("fanregister.aspx");
 
         }
     }

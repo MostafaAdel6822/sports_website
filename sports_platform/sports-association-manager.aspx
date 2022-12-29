@@ -10,27 +10,30 @@
         <div>Sports Association Manager</div>
         <div>Name of user</div>
     <form id="form1" runat="server">
-        <br/> 
-        <p>
-            Add Match</p>
-        <div>
-            <span style="padding:1.4em;">host club name</span> <span style="padding:0.5em;">guest club name</span> <span style="padding-left:2.3em;">start time</span> <span style="padding-left:5em;">end time</span>
-        </div>
+       <br/> 
+        <p>Add Match:</p>
+        <div>host club name</div>
         <asp:TextBox ID="host_name_SAM_add" runat="server"></asp:TextBox>
+        <div>guest club name</div>
         <asp:TextBox ID="guest_name_SAM_add" runat="server"></asp:TextBox>
+        <div>start time</div>
         <asp:TextBox ID="start_time_SAM_add" runat="server"></asp:TextBox>
+        <div>end time</div>
         <asp:TextBox ID="end_time_SAM_add" runat="server"></asp:TextBox>
+        <br />
         <asp:Button ID="add_match_btn" runat="server" Text="Add" OnClick="add_match_btn_Click" style="width: 80px;margin-left:35px;" />
-    <br/>
         <br/>
-    <p>
-        Delete Match</p>
-            <div>
-            <span style="padding:1.4em;">host club name</span> <span style="padding:0.5em;">guest club name</span> <span style="padding-left:2.3em;">start time</span> <span style="padding-left:5em;">end time</span></div>
+        <br/>
+        <p>Delete Match:</p>
+        <div>host club name</div>
         <asp:TextBox ID="host_name_SAM_del" runat="server"></asp:TextBox>
+        <div>guest club name</div>
         <asp:TextBox ID="guest_name_SAM_del" runat="server"></asp:TextBox>
+        <div>start time</div>
         <asp:TextBox ID="start_time_SAM_del" runat="server"></asp:TextBox>
+        <div>end time</div>
         <asp:TextBox ID="end_time_SAM_del" runat="server"></asp:TextBox>
+        <br />
         <asp:Button ID="delete_match_btn" runat="server" Text="Delete" OnClick="delete_match_btn_Click" style="width: 80px;margin-left:35px;" />
     <p>
         &nbsp;</p>

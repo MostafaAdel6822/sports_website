@@ -69,6 +69,7 @@ namespace sports_platform
                     guestClubFound = true;
             }
             rdr.Close();
+          
 
             if (hostClubFound && guestClubFound)
             {
@@ -107,8 +108,8 @@ namespace sports_platform
 
             String hostName = host_name_SAM_del.Text;
             String guestName = guest_name_SAM_del.Text;
-            // String startTime = start_time_SAM_del.Text;
-            // String endTime = end_time_SAM_del.Text;
+            String startTime = start_time_SAM_del.Text;
+            String endTime = end_time_SAM_del.Text;
 
             SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
 
@@ -128,24 +129,31 @@ namespace sports_platform
 
             if (hostClubFound && guestClubFound)
             {
-                SqlCommand deleteMatch = new SqlCommand("deleteMatch", conn);
-                deleteMatch.CommandType = CommandType.StoredProcedure;
-
-                deleteMatch.Parameters.Add(new SqlParameter("@host_name", hostName));
-                deleteMatch.Parameters.Add(new SqlParameter("@guest_name", guestName));
-                //removed 2 parameters for start and end time
-
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
-                try {
-                deleteMatch.ExecuteNonQuery();
-                MessageBox.Show("match deleted successfully");
-                }
-                catch (SqlException)
+                if (startTime == "" || endTime == "" || hostName == "" || guestName == "")
+                    MessageBox.Show("Fill All Fields!");
+                else
                 {
-                    MessageBox.Show("incorrect time format");
+                    SqlCommand deleteMatch = new SqlCommand("deleteMatch2", conn);
+                    deleteMatch.CommandType = CommandType.StoredProcedure;
+
+                    deleteMatch.Parameters.Add(new SqlParameter("@host_name", hostName));
+                    deleteMatch.Parameters.Add(new SqlParameter("@guest_name", guestName));
+                    deleteMatch.Parameters.Add(new SqlParameter("@start", startTime));
+                    deleteMatch.Parameters.Add(new SqlParameter("@end", endTime));
+
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    try
+                    {
+                        deleteMatch.ExecuteNonQuery();
+                        MessageBox.Show("match deleted successfully");
+                    }
+                    catch (SqlException)
+                    {
+                        MessageBox.Show("incorrect time format");
+                    }
+                    conn.Close();
                 }
-                conn.Close();
             }
             else
                 MessageBox.Show("invalid club name❌");
