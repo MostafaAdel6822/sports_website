@@ -25,10 +25,10 @@
             <br/>
             Register As</div>
         <br/>
-        <asp:Button ID="register_SAM" runat="server" Text="Sports Association Manager"/>
-        <asp:Button ID="register_CR" runat="server" Text="Club Representative"/>
-        <asp:Button ID="register_SM" runat="server" Text="Stadium Manager"/>
-        <asp:Button ID="register_fan" runat="server" Text="Fan"/>
+        <asp:Button ID="register_SAM" runat="server" Text="Sports Association Manager" OnClick="register_SAM_Click"/>
+        <asp:Button ID="register_CR" runat="server" Text="Club Representative" OnClick="register_CR_Click"/>
+        <asp:Button ID="register_SM" runat="server" Text="Stadium Manager" OnClick="register_SM_Click"/>
+        <asp:Button ID="register_fan" runat="server" Text="Fan" OnClick="register_fan_Click"/>
         <br/>
     </form>
 </body>

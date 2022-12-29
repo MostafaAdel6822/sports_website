@@ -26,8 +26,25 @@ namespace sports_platform
             string clubName = club_name_SA_add.Text;
             string clubLocation = club_location_SA_add.Text;
 
+            SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
+
+            if (conn.State == ConnectionState.Closed)
+                conn.Open();
+            SqlDataReader rdr = clubs.ExecuteReader(CommandBehavior.CloseConnection);
+            bool clubFound = false;
+            while (rdr.Read())
+            {
+                String club = rdr.GetString(rdr.GetOrdinal("name"));
+                if (club == clubName)
+                    clubFound = true;
+            }
+            rdr.Close();
+
             if (clubName == "" || clubLocation == "")
                 MessageBox.Show("one of the fields is empty!");
+            else if(clubFound){
+                MessageBox.Show("this club already exists!");
+            }
             else
             {
                 SqlCommand addClub = new SqlCommand("addClub", conn);
@@ -39,6 +56,7 @@ namespace sports_platform
                     conn.Open();
                 addClub.ExecuteNonQuery();
                 conn.Close();
+                MessageBox.Show("club added successfully");
             }
         }
 
@@ -72,6 +90,8 @@ namespace sports_platform
                     conn.Open();
                 deleteClub.ExecuteNonQuery();
                 conn.Close();
+                MessageBox.Show("club deleted successfully");
+
             }
             else
                 MessageBox.Show("this club does not exist!");
@@ -86,8 +106,26 @@ namespace sports_platform
             string stadiumLocation = stadium_location_SA_add.Text;
             string stadiumCapacity = stadium_capacity_SA_add.Text;
 
+            SqlCommand stadiums = new SqlCommand("SELECT * FROM allStadiums", conn);
+
+            if (conn.State == ConnectionState.Closed)
+                conn.Open();
+            SqlDataReader rdr = stadiums.ExecuteReader(CommandBehavior.CloseConnection);
+            bool stadiumFound = false;
+            while (rdr.Read())
+            {
+                String stadium = rdr.GetString(rdr.GetOrdinal("name"));
+                if (stadium == stadiumName)
+                    stadiumFound = true;
+            }
+            rdr.Close();
+
             if (stadiumName == "" || stadiumLocation == "" || stadiumCapacity =="")
                 MessageBox.Show("one of the fields is empty!");
+            else if (stadiumFound)
+            {
+                MessageBox.Show("this stadium does not exist!");
+            }
             else
             {
                 SqlCommand addStadium = new SqlCommand("addStadium", conn);
@@ -100,14 +138,14 @@ namespace sports_platform
                     conn.Open();
                 addStadium.ExecuteNonQuery();
                 conn.Close();
+                MessageBox.Show("stadium added successfully");
+
             }
 
         }
 
         protected void delete_stadium_SA_btn_Click(object sender, EventArgs e)
         {
-            //check stadium
-
             string connStr = WebConfigurationManager.ConnectionStrings["Sports_Platform_DB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
@@ -136,6 +174,7 @@ namespace sports_platform
                     conn.Open();
                 deleteStadium.ExecuteNonQuery();
                 conn.Close();
+                MessageBox.Show("stadium deleted successfully");
             }
             else
                 MessageBox.Show("this stadium does not exist!");
@@ -171,6 +210,7 @@ namespace sports_platform
                     conn.Open();
                 blockFan.ExecuteNonQuery();
                 conn.Close();
+                MessageBox.Show("fan blocked successfully");
             }
             else
                 MessageBox.Show("this fan does not exist!");

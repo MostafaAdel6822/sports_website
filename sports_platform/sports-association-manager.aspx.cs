@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
+using System.Web.Management;
 
 namespace sports_platform
 {
@@ -81,13 +82,19 @@ namespace sports_platform
 
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
+                try { 
                 addMatch.ExecuteNonQuery();
+                MessageBox.Show("match added successfully");
+                }
+                catch (SqlException)
+                {
+                    MessageBox.Show("incorrect time format");
+                }
                 conn.Close();
 
-                MessageBox.Show("match added successfully ✔");
             }
             else
-                MessageBox.Show("invalid club name❌");
+                MessageBox.Show("invalid club name");
             //can also check for each input like start time
             
             
@@ -130,10 +137,15 @@ namespace sports_platform
 
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
+                try {
                 deleteMatch.ExecuteNonQuery();
+                MessageBox.Show("match deleted successfully");
+                }
+                catch (SqlException)
+                {
+                    MessageBox.Show("incorrect time format");
+                }
                 conn.Close();
-
-                MessageBox.Show("match deleted successfully ✔");
             }
             else
                 MessageBox.Show("invalid club name❌");

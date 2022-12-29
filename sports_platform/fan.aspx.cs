@@ -37,14 +37,32 @@ namespace sports_platform
                 conn.Open();
 
             string startingTime = starting_time.Text;
-            
-            string query = $"SELECT * FROM dbo.availableMatchesStartingFrom('{startingTime}')";
-            SqlCommand viewMatches = new SqlCommand(query, conn);
-            SqlDataReader rdr = viewMatches.ExecuteReader();
-            GridView1.DataSource = rdr;
-            GridView1.DataBind();
-            rdr.Close();
-
+            if (startingTime == "")
+                MessageBox.Show("please input a start time");
+            else
+            {
+                string query = $"SELECT * FROM dbo.availableMatchesStartingFrom('{startingTime}')";
+                SqlCommand viewMatches = new SqlCommand(query, conn);
+                SqlDataReader rdr = viewMatches.ExecuteReader();
+                GridView1.DataSource = rdr;
+                try
+                {
+                    GridView1.DataBind();
+                    rdr.Close();
+                }
+                catch (SqlException)
+                {
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    rdr.Close();
+                    SqlCommand cmd1 = new SqlCommand("SELECT * FROM allMatches", conn);
+                    SqlDataReader rdr2 = cmd1.ExecuteReader();
+                    GridView1.DataSource = rdr2;
+                    GridView1.DataBind();
+                    rdr2.Close();
+                    MessageBox.Show("incorrect time format");
+                }
+            }
             conn.Close();
         }
 
@@ -53,7 +71,6 @@ namespace sports_platform
             string connStr = WebConfigurationManager.ConnectionStrings["Sports_Platform_DB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
-            //TODO: get national id using current user
             String nationalID = Session["nationalID"].ToString();
             String hostName = host_name_Fan_purchase.Text;
             String guestName = guest_name_Fan_purchase.Text;
@@ -63,8 +80,6 @@ namespace sports_platform
                 conn.Open();
 
             SqlCommand clubs = new SqlCommand("SELECT * FROM allClubs", conn);
-
-            conn.Open();
             SqlDataReader rdr = clubs.ExecuteReader(CommandBehavior.CloseConnection);
             bool hostClubFound = false;
             bool guestClubFound = false;
@@ -80,22 +95,28 @@ namespace sports_platform
 
             if (hostClubFound && guestClubFound)
             {
-                SqlCommand purchaseTicket = new SqlCommand("addNewMatch", conn);
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+                SqlCommand purchaseTicket = new SqlCommand("purchaseTicket", conn);
                 purchaseTicket.CommandType = CommandType.StoredProcedure;
 
                 purchaseTicket.Parameters.Add(new SqlParameter("@national_id", nationalID));
-                purchaseTicket.Parameters.Add(new SqlParameter("@host_name", hostName));
-                purchaseTicket.Parameters.Add(new SqlParameter("@guest_name", guestName));
+                purchaseTicket.Parameters.Add(new SqlParameter("@host_club", hostName));
+                purchaseTicket.Parameters.Add(new SqlParameter("@guest_club", guestName));
                 purchaseTicket.Parameters.Add(new SqlParameter("@start_time", startTime));
-
-                purchaseTicket.ExecuteNonQuery();
+                try
+                {
+                    purchaseTicket.ExecuteNonQuery();
+                    MessageBox.Show("ticket purchased successfully");
+                }
+                catch (SqlException)
+                {
+                    MessageBox.Show("this ticket does not exist");
+                }
                 conn.Close();
-
-                //Response.Write("ticket purchased successfully ✔");
-                MessageBox.Show("ticket purchased successfully ✔");
             }
             else
-                MessageBox.Show("invalid club name❌");
+                MessageBox.Show("invalid club name");
 
 
         }

@@ -47,19 +47,22 @@ namespace sports_platform
             bool isCR = false;
             bool isFan = false;
 
-            SqlDataReader rdrPW = pwCmd.ExecuteReader();
-            rdrPW.Read();
-            String actualPW = rdrPW.GetString(rdrPW.GetOrdinal("password"));
-            if (actualPW == currentUserPassword)
-                pwCorrect = true;
-            rdrPW.Close();
-
             SqlDataReader rdr = sysAdmin.ExecuteReader();
             while (rdr.Read())
             {
                 String username = rdr.GetString(rdr.GetOrdinal("username"));
                 if (username == currentUserUsername)
+                {
                     isSysAdmin = true;
+                    rdr.Close();
+                    SqlDataReader rdrPW = pwCmd.ExecuteReader();
+                    rdrPW.Read();
+                    String actualPW = rdrPW.GetString(rdrPW.GetOrdinal("password"));
+                    if (actualPW == currentUserPassword)
+                        pwCorrect = true;
+                    rdrPW.Close();
+                    break;
+                }
             }
             rdr.Close();
 
@@ -68,7 +71,17 @@ namespace sports_platform
             {
                 String username = rdr2.GetString(rdr2.GetOrdinal("username"));
                 if (username == currentUserUsername)
+                {
                     isSAM = true;
+                    rdr2.Close();
+                    SqlDataReader rdrPW = pwCmd.ExecuteReader();
+                    rdrPW.Read();
+                    String actualPW = rdrPW.GetString(rdrPW.GetOrdinal("password"));
+                    if (actualPW == currentUserPassword)
+                        pwCorrect = true;
+                    rdrPW.Close();
+                    break;
+                }
             }
             rdr2.Close();
 
@@ -77,7 +90,17 @@ namespace sports_platform
             {
                 String username = rdr3.GetString(rdr3.GetOrdinal("username"));
                 if (username == currentUserUsername)
+                {
                     isSM = true;
+                    rdr3.Close();
+                    SqlDataReader rdrPW = pwCmd.ExecuteReader();
+                    rdrPW.Read();
+                    String actualPW = rdrPW.GetString(rdrPW.GetOrdinal("password"));
+                    if (actualPW == currentUserPassword)
+                        pwCorrect = true;
+                    rdrPW.Close();
+                    break;
+                }
             }
             rdr3.Close();
 
@@ -86,7 +109,17 @@ namespace sports_platform
             {
                 String username = rdr4.GetString(rdr4.GetOrdinal("username"));
                 if (username == currentUserUsername)
+                {
                     isCR = true;
+                    rdr4.Close();
+                    SqlDataReader rdrPW = pwCmd.ExecuteReader();
+                    rdrPW.Read();
+                    String actualPW = rdrPW.GetString(rdrPW.GetOrdinal("password"));
+                    if (actualPW == currentUserPassword)
+                        pwCorrect = true;
+                    rdrPW.Close();
+                    break;
+                }
             }
             rdr4.Close();
 
@@ -95,7 +128,17 @@ namespace sports_platform
             {
                 String username = rdr5.GetString(rdr5.GetOrdinal("username"));
                 if (username == currentUserUsername)
+                {
                     isFan = true;
+                    rdr5.Close();
+                    SqlDataReader rdrPW = pwCmd.ExecuteReader();
+                    rdrPW.Read();
+                    String actualPW = rdrPW.GetString(rdrPW.GetOrdinal("password"));
+                    if (actualPW == currentUserPassword)
+                        pwCorrect = true;
+                    rdrPW.Close();
+                    break;
+                }
 
             }
             rdr5.Close();
@@ -113,14 +156,6 @@ namespace sports_platform
             }
             else if (isSM && pwCorrect)
             {
-                SqlCommand stadium_cmd = new SqlCommand($"SELECT S.name FROM Stadium S " +
-                    $"INNER JOIN StadiumManager SM ON S.ID = SM.stadium_ID " +
-                    $"WHERE SM.username = '{currentUserUsername}'", conn);
-                SqlDataReader rdrStadium = stadium_cmd.ExecuteReader();
-                rdrStadium.Read();
-                Session["stadium"] = rdrStadium.GetString(rdrStadium.GetOrdinal("name"));
-                rdrStadium.Close();
-
                 Response.Redirect(".aspx");
             }
             else if (isCR && pwCorrect)
@@ -143,6 +178,26 @@ namespace sports_platform
                 MessageBox.Show("invalid credentials!");
 
             conn.Close();
+        }
+
+        protected void register_SAM_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void register_CR_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void register_SM_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void register_fan_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
