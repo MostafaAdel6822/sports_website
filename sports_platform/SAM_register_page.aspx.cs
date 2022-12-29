@@ -29,15 +29,34 @@ namespace sports_platform
                 MessageBox.Show("Please Fill All Fields!");
             else
             {
-                SqlCommand addSAM = new SqlCommand("addAssociationManager", conn);
-                addSAM.CommandType = CommandType.StoredProcedure;
-                addSAM.Parameters.Add(new SqlParameter("@name", name));
-                addSAM.Parameters.Add(new SqlParameter("@username", username));
-                addSAM.Parameters.Add(new SqlParameter("@password", password));
-                conn.Open();
-                addSAM.ExecuteNonQuery();
-                conn.Close();
-                MessageBox.Show("Registered Successfully");
+                SqlCommand userCmd = new SqlCommand("SELECT * FROM SystemUser", conn);
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+                SqlDataReader userRdr = userCmd.ExecuteReader();
+                bool usernameFound = false;
+                while (userRdr.Read())
+                {
+                    String current_username = userRdr.GetString(userRdr.GetOrdinal("username"));
+                    if (username == current_username)
+                        usernameFound = true;
+                }
+                userRdr.Close();
+                if (!usernameFound)
+                {
+                    SqlCommand addSAM = new SqlCommand("addAssociationManager", conn);
+                    addSAM.CommandType = CommandType.StoredProcedure;
+                    addSAM.Parameters.Add(new SqlParameter("@name", name));
+                    addSAM.Parameters.Add(new SqlParameter("@username", username));
+                    addSAM.Parameters.Add(new SqlParameter("@password", password));
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    addSAM.ExecuteNonQuery();
+                    conn.Close();
+                    MessageBox.Show("Registered Successfully");
+                }
+                else
+                    MessageBox.Show("Username Already Exists!");
+
             }
 
 

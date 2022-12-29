@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CR_home\barca logo.png" />
+    <Content Include="CR_home\barcaAnthem.wav" />
     <Content Include="CR_home\CR_home.aspx" />
     <Content Include="CR_register_page.aspx" />
     <Content Include="SAM_register_page.aspx" />

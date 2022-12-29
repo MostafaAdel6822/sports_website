@@ -25,17 +25,65 @@ namespace sports_platform
             String name = cr_name.Text;
             String username = cr_username.Text;
             String password = cr_password.Text;
-            String club_name = cr_cub_name.Text;  
-            SqlCommand addCR = new SqlCommand("addRepresentative", conn);
-            addCR.CommandType = CommandType.StoredProcedure;
-            addCR.Parameters.Add(new SqlParameter("@representative_name", name));
-            addCR.Parameters.Add(new SqlParameter("@representative_username", username));
-            addCR.Parameters.Add(new SqlParameter("@representative_password", password));
-            addCR.Parameters.Add(new SqlParameter("@represented_club_name", club_name));
-            conn.Open();
-            addCR.ExecuteNonQuery();
-            conn.Close();
-            MessageBox.Show("Registered Successfully");
+            String club_name = cr_cub_name.Text;
+            if (name == "" || username == "" || password == "" || club_name == "")
+            {
+                MessageBox.Show("Please Fill all Fields!");
+            }
+            else
+            {
+              
+                SqlCommand userCmd = new SqlCommand("SELECT * FROM SystemUser", conn);
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+                SqlDataReader userRdr = userCmd.ExecuteReader();
+                bool usernameFound = false;
+                while (userRdr.Read())
+                {
+                    String current_username = userRdr.GetString(userRdr.GetOrdinal("username"));
+                    if (username == current_username)
+                        usernameFound = true;
+                }
+                userRdr.Close();
+                if (!usernameFound)
+                {
+
+                    SqlCommand clubCmd = new SqlCommand("SELECT * FROM Club", conn);
+                    if (conn.State == ConnectionState.Closed)
+                        conn.Open();
+                    SqlDataReader clubRdr = clubCmd.ExecuteReader();
+                    bool clubExist = false;
+                    while (clubRdr.Read())
+                    {
+                        String temp_name = clubRdr.GetString(clubRdr.GetOrdinal("name"));
+                        if (club_name == temp_name)
+                            clubExist = true;
+                    }
+                    clubRdr.Close();
+
+                    if (clubExist)
+                    {
+                        SqlCommand addCR = new SqlCommand("addRepresentative", conn);
+                        addCR.CommandType = CommandType.StoredProcedure;
+                        addCR.Parameters.Add(new SqlParameter("@representative_name", name));
+                        addCR.Parameters.Add(new SqlParameter("@representative_username", username));
+                        addCR.Parameters.Add(new SqlParameter("@representative_password", password));
+                        addCR.Parameters.Add(new SqlParameter("@represented_club_name", club_name));
+                        if (conn.State == ConnectionState.Closed)
+                            conn.Open();
+                        addCR.ExecuteNonQuery();
+                        conn.Close();
+                        MessageBox.Show("Registered Successfully");
+                    }
+                    else
+                        MessageBox.Show("Invalid Club");
+
+                }
+                else
+                    MessageBox.Show("Username Already Exists!");
+                
+                
+            }
         }
     }
 }

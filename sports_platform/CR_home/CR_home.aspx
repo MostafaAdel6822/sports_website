@@ -24,13 +24,13 @@
 
     <asp:Label runat="server" Text="Start Time"></asp:Label>
     <br />
-    <asp:TextBox ID="StartTime" runat="server"></asp:TextBox>
+    <asp:TextBox ID="StartTime" placeholder="yyyy-MM-dd HH:mm:ss" runat="server"></asp:TextBox>
     <asp:Button ID="sendReq" runat="server" Text="Send Request " OnClick="Send_Request" />
     <br />
    
     <asp:Label runat="server" Text="Date"></asp:Label>
     <br />
-    <asp:TextBox ID="searchDate" runat="server"></asp:TextBox>
+    <asp:TextBox ID="searchDate" placeholder="yyyy/MM/dd" runat="server"></asp:TextBox>
     <asp:Button ID="search" runat="server" Text="View Available Stadiums" OnClick="View_Available_Stadiums" />
 
      <asp:GridView ID="GridView2" runat="server"></asp:GridView>
