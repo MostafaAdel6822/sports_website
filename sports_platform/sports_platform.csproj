@@ -68,6 +68,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fan.aspx" />
+    <Content Include="index.aspx" />
+    <Content Include="sports-association-manager.aspx" />
+    <Content Include="system-admin.aspx" />
+    <Content Include="Web.config" />
     <Content Include="CR_home\barca logo.png" />
     <Content Include="CR_home\barcaAnthem.wav" />
     <Content Include="CR_home\CR_home.aspx" />
@@ -76,7 +81,21 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CR_home\CR_home.aspx.cs">
+    <Compile Include="fan.aspx.cs">
+      <DependentUpon>fan.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="fan.aspx.designer.cs">
+      <DependentUpon>fan.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      </Compile>
+      <Compile Include="CR_home\CR_home.aspx.cs">
       <DependentUpon>CR_home.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -96,9 +115,25 @@
     </Compile>
     <Compile Include="SAM_register_page.aspx.designer.cs">
       <DependentUpon>SAM_register_page.aspx</DependentUpon>
+        </Compile>
+           
+    <Compile Include="sports-association-manager.aspx.cs">
+      <DependentUpon>sports-association-manager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sports-association-manager.aspx.designer.cs">
+      <DependentUpon>sports-association-manager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="system-admin.aspx.cs">
+      <DependentUpon>system-admin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="system-admin.aspx.designer.cs">
+      <DependentUpon>system-admin.aspx</DependentUpon>
+    </Compile>
+     <Compile Include="Properties\AssemblyInfo.cs" />    
   </ItemGroup>
+  
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
